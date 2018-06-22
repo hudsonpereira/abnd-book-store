@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:exported="false"
+            android:authorities="com.example.hudson.bookstore"
+            android:name=".data.BookProvider" />
     </application>
 
 </manifest>
