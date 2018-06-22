@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.hudson.bookstore.data.BookContract;
 import com.example.hudson.bookstore.data.BookContract.BookEntry;
 import com.example.hudson.bookstore.data.BookDbHelper;
+import com.example.hudson.bookstore.data.BookProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 BookDbHelper bookDbHelper = new BookDbHelper(MainActivity.this);
                 SQLiteDatabase sqLiteDatabase = bookDbHelper.getReadableDatabase();
 
@@ -63,13 +66,15 @@ public class MainActivity extends AppCompatActivity {
                         BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
                 };
 
-                Cursor cursor = sqLiteDatabase.query(BookEntry.TABLE_NAME,
-                        projection,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null);
+                Cursor cursor = getContentResolver().query(BookProvider.CONTENT_URI, projection, null, null, null);
+
+//                Cursor cursor = sqLiteDatabase.query(BookEntry.TABLE_NAME,
+//                        projection,
+//                        null,
+//                        null,
+//                        null,
+//                        null,
+//                        null);
 
                 int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
                 int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
