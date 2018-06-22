@@ -4,4 +4,7 @@
     <string name="read_data">Read Data</string>
     <string name="welcome_message">Welcome to my Android Basics Nanodegree Book Store project. Feel free to press whatever button you like to see what happens.</string>
     <string name="data_inserted">Data inserted!</string>
+    <string name="demo_product_name">New product</string>
+    <string name="demo_supplier_name">Hudson</string>
+    <string name="demo_supplier_phone">+5514996097794</string>
 </resources>

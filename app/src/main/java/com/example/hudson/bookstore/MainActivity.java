@@ -15,6 +15,9 @@ import com.example.hudson.bookstore.data.BookDbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int DEMO_BOOK_PRICE = 10;
+    public static final int DEMO_BOOK_QUANTITY = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 SQLiteDatabase sqLiteDatabase = bookDbHelper.getWritableDatabase();
 
                 ContentValues cv = new ContentValues();
-                cv.put(BookEntry.COLUMN_PRODUCT_NAME, "New product");
-                cv.put(BookEntry.COLUMN_PRICE, 10);
-                cv.put(BookEntry.COLUMN_QUANTITY, 3);
-                cv.put(BookEntry.COLUMN_SUPPLIER_NAME, "Hudson");
-                cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "+5514996097794");
+                cv.put(BookEntry.COLUMN_PRODUCT_NAME, getString(R.string.demo_product_name));
+                cv.put(BookEntry.COLUMN_PRICE, DEMO_BOOK_PRICE);
+                cv.put(BookEntry.COLUMN_QUANTITY, DEMO_BOOK_QUANTITY);
+                cv.put(BookEntry.COLUMN_SUPPLIER_NAME, getString(R.string.demo_supplier_name));
+                cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.demo_supplier_phone));
 
                 sqLiteDatabase.insert(BookEntry.TABLE_NAME, null, cv);
 
