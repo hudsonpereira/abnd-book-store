@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">BookStore</string>
+    <string name="insert_data">Insert Data</string>
+    <string name="read_data">Read Data</string>
+    <string name="welcome_message">Welcome to my Android Basics Nanodegree Book Store project. Feel free to press whatever button you like to see what happens.</string>
 </resources>
