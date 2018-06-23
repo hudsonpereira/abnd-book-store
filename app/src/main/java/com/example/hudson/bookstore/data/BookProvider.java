@@ -9,11 +9,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static com.example.hudson.bookstore.data.BookContract.CONTENT_AUTHORITY;
 import static com.example.hudson.bookstore.data.BookContract.PATH_BOOKS;
 
 public class BookProvider extends ContentProvider {
+
+    public static final String TAG = BookProvider.class.getSimpleName();
 
     public static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -94,6 +97,10 @@ public class BookProvider extends ContentProvider {
         long id = database.insert(BookContract.BookEntry.TABLE_NAME,
                 null,
                 values);
+
+        if (id == -1) {
+            Log.e(TAG, "Failed to insert row for:" + uri);
+        }
 
         return ContentUris.withAppendedId(uri, id);
     }
