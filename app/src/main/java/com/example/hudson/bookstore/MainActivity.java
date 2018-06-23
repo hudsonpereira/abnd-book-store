@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hudson.bookstore.data.BookContract;
 import com.example.hudson.bookstore.data.BookContract.BookEntry;
@@ -25,15 +26,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button insertButton = findViewById(R.id.insert_data_button);
-        Button readButton = findViewById(R.id.read_data_button);
+        final Button readButton = findViewById(R.id.read_data_button);
         final TextView resultsTextView = findViewById(R.id.results_text_view);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BookDbHelper bookDbHelper = new BookDbHelper(MainActivity.this);
-                SQLiteDatabase sqLiteDatabase = bookDbHelper.getWritableDatabase();
-
                 ContentValues cv = new ContentValues();
                 cv.put(BookEntry.COLUMN_PRODUCT_NAME, getString(R.string.demo_product_name));
                 cv.put(BookEntry.COLUMN_PRICE, DEMO_BOOK_PRICE);
@@ -41,18 +39,15 @@ public class MainActivity extends AppCompatActivity {
                 cv.put(BookEntry.COLUMN_SUPPLIER_NAME, getString(R.string.demo_supplier_name));
                 cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.demo_supplier_phone));
 
-                sqLiteDatabase.insert(BookEntry.TABLE_NAME, null, cv);
+                getContentResolver().insert(BookContract.CONTENT_URI, cv);
 
                 resultsTextView.setText(getString(R.string.data_inserted));
-
-                sqLiteDatabase.close();
             }
         });
 
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 BookDbHelper bookDbHelper = new BookDbHelper(MainActivity.this);
                 SQLiteDatabase sqLiteDatabase = bookDbHelper.getReadableDatabase();
@@ -66,15 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
                 };
 
-                Cursor cursor = getContentResolver().query(BookProvider.CONTENT_URI, projection, null, null, null);
-
-//                Cursor cursor = sqLiteDatabase.query(BookEntry.TABLE_NAME,
-//                        projection,
-//                        null,
-//                        null,
-//                        null,
-//                        null,
-//                        null);
+                Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
 
                 int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
                 int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);

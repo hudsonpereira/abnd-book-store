@@ -10,12 +10,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import static com.example.hudson.bookstore.data.BookContract.CONTENT_AUTHORITY;
+import static com.example.hudson.bookstore.data.BookContract.PATH_BOOKS;
+
 public class BookProvider extends ContentProvider {
 
-    public static final String CONTENT_AUTHORITY = "com.example.hudson.bookstore";
-    public static final String PATH_BOOKS = "books";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-    public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
     public static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     public static final int BOOKS = 100;
@@ -39,7 +38,7 @@ public class BookProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteDatabase database = bookDbHelper.getReadableDatabase();
 
-        Cursor cursor = null;
+        Cursor cursor;
 
         int match = uriMatcher.match(uri);
 
@@ -53,6 +52,8 @@ public class BookProvider extends ContentProvider {
 
                 cursor = database.query(BookContract.BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
+            default:
+                throw new IllegalArgumentException("Query error with URI: " + uri.toString());
         }
 
         return cursor;
@@ -67,7 +68,14 @@ public class BookProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case BOOKS:
+                return insertBook(uri, values);
+            default:
+                throw new IllegalArgumentException("Insert error with URI: " + uri.toString());
+        }
     }
 
     @Override
@@ -78,5 +86,15 @@ public class BookProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         return 0;
+    }
+
+    private Uri insertBook(Uri uri, ContentValues values) {
+        SQLiteDatabase database = bookDbHelper.getWritableDatabase();
+
+        long id = database.insert(BookContract.BookEntry.TABLE_NAME,
+                null,
+                values);
+
+        return ContentUris.withAppendedId(uri, id);
     }
 }
