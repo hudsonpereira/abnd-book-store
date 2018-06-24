@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hudson.bookstore.adapter.BookCursorAdapter;
 import com.example.hudson.bookstore.data.BookContract;
 import com.example.hudson.bookstore.data.BookContract.BookEntry;
 import com.example.hudson.bookstore.data.BookDbHelper;
@@ -26,8 +28,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button insertButton = findViewById(R.id.insert_data_button);
-        final Button readButton = findViewById(R.id.read_data_button);
-        final TextView resultsTextView = findViewById(R.id.results_text_view);
+        final ListView booksListView = findViewById(R.id.book_list_View);
+
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
+        };
+
+        Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
+
+        booksListView.setAdapter(new BookCursorAdapter(MainActivity.this, cursor));
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,71 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.demo_supplier_phone));
 
                 getContentResolver().insert(BookContract.CONTENT_URI, cv);
-
-                resultsTextView.setText(getString(R.string.data_inserted));
-            }
-        });
-
-        readButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                BookDbHelper bookDbHelper = new BookDbHelper(MainActivity.this);
-                SQLiteDatabase sqLiteDatabase = bookDbHelper.getReadableDatabase();
-
-                String[] projection = {
-                        BookEntry._ID,
-                        BookEntry.COLUMN_PRODUCT_NAME,
-                        BookEntry.COLUMN_PRICE,
-                        BookEntry.COLUMN_QUANTITY,
-                        BookEntry.COLUMN_SUPPLIER_NAME,
-                        BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
-                };
-
-                Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
-
-                int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
-                int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
-                int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-                int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
-                int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
-                int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-                StringBuilder headerText = new StringBuilder();
-
-                for(String column: projection) {
-                    headerText.append(column).append(" ");
-                }
-
-                resultsTextView.setText(headerText.append("\n\n").toString());
-
-                while(cursor.moveToNext()) {
-                    StringBuilder row = new StringBuilder();
-
-                    int currentId = cursor.getInt(idColumnIndex);
-                    String currentName = cursor.getString(nameColumnIndex);
-                    int currentPrice = cursor.getInt(priceColumnIndex);
-                    int currentQuantity = cursor.getInt(quantityColumnIndex);
-                    String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                    String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                    row.append(currentId)
-                            .append(" ")
-                            .append(currentName)
-                            .append(" ")
-                            .append(currentPrice)
-                            .append(" ")
-                            .append(currentQuantity)
-                            .append(" ")
-                            .append(currentSupplierName)
-                            .append(" ")
-                            .append(currentSupplierPhone);
-
-                    resultsTextView.append(row.append("\n").toString());
-                }
-
-                cursor.close();
-                sqLiteDatabase.close();
             }
         });
     }

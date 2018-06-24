@@ -65,6 +65,15 @@ public class BookProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case BOOKS:
+                return BookContract.CONTENT_ITEM_TYPE;
+            case BOOK_ID:
+                return BookContract.CONTENT_LIST_TYPE;
+        }
+
         return null;
     }
 

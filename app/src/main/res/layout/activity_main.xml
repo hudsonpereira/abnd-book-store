@@ -4,28 +4,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/layout_margin"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/results_text_view"
+    <ListView
+        android:id="@+id/book_list_View"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        android:textSize="@dimen/result_text_Size"
-        android:text="@string/welcome_message" />
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/insert_data_button"
         android:text="@string/insert_data"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/read_data_button"
-        android:text="@string/read_data"
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

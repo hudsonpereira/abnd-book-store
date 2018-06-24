@@ -7,4 +7,8 @@
     <string name="demo_product_name">New product</string>
     <string name="demo_supplier_name">Hudson</string>
     <string name="demo_supplier_phone">+5514996097794</string>
+    <string name="sale_button_text">Sale</string>
+    <string name="example_price">R$10,00</string>
+    <string name="example_quantity">5 Units left</string>
+    <string name="example_book_title">Book Title</string>
 </resources>
