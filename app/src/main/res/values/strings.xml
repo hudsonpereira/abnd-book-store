@@ -12,4 +12,6 @@
     <string name="example_quantity">5 Units left</string>
     <string name="example_book_title">Book Title</string>
     <string name="no_books_available">No books available.</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="add_book">Add Book</string>
 </resources>
