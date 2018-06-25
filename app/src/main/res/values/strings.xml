@@ -24,4 +24,8 @@
     <string name="book_inserted_successfully">Book inserted successfully</string>
     <string name="delete">Delete</string>
     <string name="book_deleted_successfully">Book deleted successfully</string>
+    <string name="delete_all_books">Delete all books</string>
+    <string name="sold">Sold</string>
+    <string name="units_left">%d units left</string>
+    <string name="no_units_left">No units left</string>
 </resources>

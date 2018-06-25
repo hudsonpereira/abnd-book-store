@@ -20,6 +20,7 @@ import com.example.hudson.bookstore.data.BookContract.BookEntry;
 
 public class EditorActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final int CURSOR_LOADER = 0;
     public static final String EXTRA_BOOK_ID = "EXTRA_BOOK_ID";
 
     TextInputEditText bookTitleEditText;
@@ -44,7 +45,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
             Bundle bundle = new Bundle();
             bundle.putString(EXTRA_BOOK_ID, bookUri.toString());
 
-            getSupportLoaderManager().initLoader(1, bundle, this);
+            getSupportLoaderManager().initLoader(CURSOR_LOADER, bundle, this);
 
         } else {
             getSupportActionBar().setTitle(R.string.add_book);
@@ -79,13 +80,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        data.moveToFirst();
+        if (data != null && data.getCount() > 0) {
+            data.moveToFirst();
 
-        bookTitleEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME)));
-        quantityEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_QUANTITY)));
-        priceEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_PRICE)));
-        supplierNameEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME)));
-        supplierPhoneEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER)));
+            bookTitleEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME)));
+            quantityEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_QUANTITY)));
+            priceEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_PRICE)));
+            supplierNameEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME)));
+            supplierPhoneEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER)));
+        }
     }
 
     @Override
@@ -101,7 +104,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
             MenuItem item = menu.findItem(R.id.menu_delete);
             item.setVisible(false);
         }
-        
+
         return true;
     }
 
@@ -140,7 +143,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
 
                 Toast.makeText(this, getString(R.string.book_deleted_successfully), Toast.LENGTH_SHORT).show();
 
-                onBackPressed();
                 finish();
 
                 return true;

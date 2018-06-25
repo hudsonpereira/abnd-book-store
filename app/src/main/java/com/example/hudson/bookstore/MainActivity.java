@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        bookCursorAdapter.changeCursor(data);
+        bookCursorAdapter.swapCursor(data);
     }
 
     @Override

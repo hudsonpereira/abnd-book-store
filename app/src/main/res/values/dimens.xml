@@ -2,4 +2,5 @@
 <resources>
     <dimen name="result_text_Size">12sp</dimen>
     <dimen name="layout_margin">8dp</dimen>
+    <dimen name="quantity_margin">8dp</dimen>
 </resources>

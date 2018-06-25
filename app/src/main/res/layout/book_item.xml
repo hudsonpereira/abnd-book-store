@@ -13,7 +13,8 @@
 
     <TextView
         android:id="@+id/book_quantity"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/book_title"
+        android:layout_marginTop="@dimen/quantity_margin"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
         tools:text="@string/example_quantity"
         android:layout_width="wrap_content"
