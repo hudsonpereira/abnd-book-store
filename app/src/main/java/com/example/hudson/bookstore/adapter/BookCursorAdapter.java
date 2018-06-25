@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.hudson.bookstore.R;
 import com.example.hudson.bookstore.data.BookContract;
+import com.example.hudson.bookstore.data.BookContract.BookEntry;
 
 public class BookCursorAdapter extends CursorAdapter{
     public BookCursorAdapter(Context context, Cursor c) {
@@ -25,9 +26,11 @@ public class BookCursorAdapter extends CursorAdapter{
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView bookTitleTextView = view.findViewById(R.id.book_title);
+        TextView bookQuantityTextView = view.findViewById(R.id.book_quantity);
+        TextView priceTextView = view.findViewById(R.id.price);
 
-        String bookTitle = cursor.getString(cursor.getColumnIndex(BookContract.BookEntry.COLUMN_PRODUCT_NAME));
-
-        bookTitleTextView.setText(bookTitle);
+        bookTitleTextView.setText(cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME)));
+        bookQuantityTextView.setText(cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY)));
+        priceTextView.setText(cursor.getString(cursor.getColumnIndex(BookEntry.COLUMN_PRICE)));
     }
 }

@@ -11,6 +11,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.hudson.bookstore.data.BookContract.BookEntry;
+
+import java.util.Arrays;
+
 import static com.example.hudson.bookstore.data.BookContract.CONTENT_AUTHORITY;
 import static com.example.hudson.bookstore.data.BookContract.PATH_BOOKS;
 
@@ -47,13 +51,15 @@ public class BookProvider extends ContentProvider {
 
         switch (match) {
             case BOOKS:
-                cursor = database.query(BookContract.BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+
+                Log.i(TAG, "Row count: " + cursor.getCount());
                 break;
             case BOOK_ID:
-                selection = BookContract.BookEntry._ID + "=?";
+                selection = BookEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
 
-                cursor = database.query(BookContract.BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Query error with URI: " + uri.toString());
@@ -88,30 +94,58 @@ public class BookProvider extends ContentProvider {
             case BOOKS:
                 return insertBook(uri, values);
             default:
-                throw new IllegalArgumentException("Insert error with URI: " + uri.toString());
+                throw new IllegalArgumentException("Insert error with URI: " + uri);
         }
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = bookDbHelper.getWritableDatabase();
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case BOOK_ID:
+                int records = database.delete(BookEntry.TABLE_NAME, BookEntry._ID + "=?", new String[]{String.valueOf(ContentUris.parseId(uri))});
+
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return records;
+            default:
+                throw new IllegalArgumentException("update error with URI: " + uri);
+        }
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = bookDbHelper.getWritableDatabase();
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case BOOK_ID:
+                Long bookId = ContentUris.parseId(uri);
+
+                int records = database.update(BookEntry.TABLE_NAME, values, BookEntry._ID + "=?", new String[] {bookId.toString()});
+
+                getContext().getContentResolver().notifyChange(uri, null);
+
+                return records;
+            default:
+                throw new IllegalArgumentException("update error with URI: " + uri);
+        }
     }
 
     private Uri insertBook(Uri uri, ContentValues values) {
         SQLiteDatabase database = bookDbHelper.getWritableDatabase();
 
-        long id = database.insert(BookContract.BookEntry.TABLE_NAME,
+        long id = database.insert(BookEntry.TABLE_NAME,
                 null,
                 values);
 
         if (id == -1) {
             Log.e(TAG, "Failed to insert row for:" + uri);
         }
+
+        Log.i(TAG, "insertBook: Inserted with id: " + id);
 
         getContext().getContentResolver().notifyChange(uri, null);
 

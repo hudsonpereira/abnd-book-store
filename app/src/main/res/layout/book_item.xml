@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools">
     <TextView
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/book_quantity"
         android:layout_alignParentBottom="true"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
         tools:text="@string/example_quantity"
@@ -31,9 +32,10 @@
         android:id="@+id/sale_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/price"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
         android:focusable="false"
         android:text="@string/sale_button_text" />
 </RelativeLayout>
