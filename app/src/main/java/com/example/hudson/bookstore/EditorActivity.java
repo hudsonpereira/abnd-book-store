@@ -11,6 +11,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -119,6 +120,31 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
                 cv.put(BookEntry.COLUMN_QUANTITY, quantityEditText.getText().toString());
                 cv.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameEditText.getText().toString());
                 cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneEditText.getText().toString());
+
+                if (TextUtils.isEmpty(cv.getAsString(BookEntry.COLUMN_PRODUCT_NAME))) {
+                    Toast.makeText(this, R.string.invalid_product_name, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if (TextUtils.isEmpty(cv.getAsString(BookEntry.COLUMN_PRICE))) {
+                    Toast.makeText(this, R.string.invalid_price, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if (TextUtils.isEmpty(cv.getAsString(BookEntry.COLUMN_QUANTITY)) || cv.getAsInteger(BookEntry.COLUMN_QUANTITY) < 0) {
+                    Toast.makeText(this, R.string.invalid_quantity, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if (TextUtils.isEmpty(cv.getAsString(BookEntry.COLUMN_SUPPLIER_NAME))) {
+                    Toast.makeText(this, R.string.invalid_supplier_name, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if (TextUtils.isEmpty(cv.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER))) {
+                    Toast.makeText(this, R.string.invalid_supplier_phone, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
 
                 if (bookUri != null) {
 

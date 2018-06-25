@@ -28,4 +28,9 @@
     <string name="sold">Sold</string>
     <string name="units_left">%d units left</string>
     <string name="no_units_left">No units left</string>
+    <string name="invalid_product_name">Book title cannot be empty</string>
+    <string name="invalid_price">Price is invalid</string>
+    <string name="invalid_quantity">Quantity is invalid</string>
+    <string name="invalid_supplier_name">Invalid supplier name</string>
+    <string name="invalid_supplier_phone">Invalid supplier phone</string>
 </resources>
