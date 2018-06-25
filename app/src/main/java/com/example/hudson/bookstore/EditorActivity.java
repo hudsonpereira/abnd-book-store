@@ -1,12 +1,15 @@
 package com.example.hudson.bookstore;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.hudson.bookstore.data.BookContract;
@@ -22,6 +27,9 @@ import com.example.hudson.bookstore.data.BookContract.BookEntry;
 public class EditorActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     public static final int CURSOR_LOADER = 0;
+
+    public static final int CALL_REQUEST_CODE = 1;
+
     public static final String EXTRA_BOOK_ID = "EXTRA_BOOK_ID";
 
     TextInputEditText bookTitleEditText;
@@ -29,6 +37,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
     TextInputEditText quantityEditText;
     TextInputEditText supplierNameEditText;
     TextInputEditText supplierPhoneEditText;
+
+    Button callSupplierButton;
 
     Uri bookUri;
 
@@ -57,6 +67,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
         quantityEditText = findViewById(R.id.book_quantity);
         supplierNameEditText = findViewById(R.id.supplier_name);
         supplierPhoneEditText = findViewById(R.id.supplier_phone);
+        callSupplierButton = findViewById(R.id.call_supplier);
     }
 
     @Override
@@ -80,7 +91,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, final Cursor data) {
         if (data != null && data.getCount() > 0) {
             data.moveToFirst();
 
@@ -89,6 +100,30 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
             priceEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_PRICE)));
             supplierNameEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME)));
             supplierPhoneEditText.setText(data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER)));
+
+            callSupplierButton.setVisibility(View.VISIBLE);
+            callSupplierButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+
+                    String number = data.getString(data.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER));
+
+                    if (TextUtils.isEmpty(number)) {
+                        Toast.makeText(EditorActivity.this, R.string.invalid_supplier_phone, Toast.LENGTH_SHORT).show();
+                    }
+
+                    intent.setData(Uri.parse("tel:" + number));
+
+                    if (ActivityCompat.checkSelfPermission(EditorActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                        ActivityCompat.requestPermissions(EditorActivity.this, new String[] {Manifest.permission.CALL_PHONE}, CALL_REQUEST_CODE);
+
+                        return;
+                    }
+                    startActivity(intent);
+                }
+            });
         }
     }
 

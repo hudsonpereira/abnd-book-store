@@ -33,4 +33,5 @@
     <string name="invalid_quantity">Quantity is invalid</string>
     <string name="invalid_supplier_name">Invalid supplier name</string>
     <string name="invalid_supplier_phone">Invalid supplier phone</string>
+    <string name="call_the_supplier">Call the supplier</string>
 </resources>
