@@ -11,4 +11,5 @@
     <string name="example_price">R$10,00</string>
     <string name="example_quantity">5 Units left</string>
     <string name="example_book_title">Book Title</string>
+    <string name="no_books_available">No books available.</string>
 </resources>

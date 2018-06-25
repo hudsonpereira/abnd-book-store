@@ -12,6 +12,16 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <TextView
+        android:id="@+id/empty_text_view"
+        android:text="@string/no_books_available"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp" />
+
     <Button
         android:id="@+id/insert_data_button"
         android:text="@string/insert_data"

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int DEMO_BOOK_PRICE = 10;
     public static final int DEMO_BOOK_QUANTITY = 3;
+    private ListView booksListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +29,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button insertButton = findViewById(R.id.insert_data_button);
-        final ListView booksListView = findViewById(R.id.book_list_View);
+        booksListView = findViewById(R.id.book_list_View);
+        booksListView.setEmptyView(findViewById(R.id.empty_text_view));
 
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN_PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
-        };
-
-        Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
-
-        booksListView.setAdapter(new BookCursorAdapter(MainActivity.this, cursor));
+        loadBooks();
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +45,25 @@ public class MainActivity extends AppCompatActivity {
                 cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.demo_supplier_phone));
 
                 getContentResolver().insert(BookContract.CONTENT_URI, cv);
+
+                loadBooks();
             }
         });
     }
+
+    void loadBooks() {
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
+        };
+
+        Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
+
+        booksListView.setAdapter(new BookCursorAdapter(MainActivity.this, cursor));
+    }
+
 }
