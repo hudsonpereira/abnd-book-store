@@ -2,6 +2,7 @@ package com.example.hudson.bookstore;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -200,11 +202,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
 
                 return true;
             case R.id.menu_delete:
-                getContentResolver().delete(bookUri, null, null);
 
-                Toast.makeText(this, getString(R.string.book_deleted_successfully), Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.confirm_delete)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getContentResolver().delete(bookUri, null, null);
 
-                finish();
+                                Toast.makeText(EditorActivity.this, getString(R.string.book_deleted_successfully), Toast.LENGTH_SHORT).show();
+
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
 
                 return true;
             default:

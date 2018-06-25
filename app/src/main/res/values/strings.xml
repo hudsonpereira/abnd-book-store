@@ -34,4 +34,7 @@
     <string name="invalid_supplier_name">Invalid supplier name</string>
     <string name="invalid_supplier_phone">Invalid supplier phone</string>
     <string name="call_the_supplier">Call the supplier</string>
+    <string name="confirm_delete">Are you sure you want to delete this item?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
