@@ -59,6 +59,8 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Query error with URI: " + uri.toString());
         }
 
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -110,6 +112,8 @@ public class BookProvider extends ContentProvider {
         if (id == -1) {
             Log.e(TAG, "Failed to insert row for:" + uri);
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return ContentUris.withAppendedId(uri, id);
     }
