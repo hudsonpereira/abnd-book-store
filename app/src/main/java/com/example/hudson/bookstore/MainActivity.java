@@ -6,6 +6,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button insertButton = findViewById(R.id.insert_data_button);
+        FloatingActionButton insertButton = findViewById(R.id.insert_data_button);
         ListView booksListView = findViewById(R.id.book_list_View);
         booksListView.setEmptyView(findViewById(R.id.empty_text_view));
         booksListView.setAdapter(bookCursorAdapter);
