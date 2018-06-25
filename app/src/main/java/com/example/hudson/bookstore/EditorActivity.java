@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.hudson.bookstore.data.BookContract;
@@ -41,6 +42,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
     TextInputEditText supplierPhoneEditText;
 
     Button callSupplierButton;
+
+    ImageButton quantityRemoveButton;
+    ImageButton quantityAddButton;
 
     Uri bookUri;
 
@@ -70,10 +74,46 @@ public class EditorActivity extends AppCompatActivity implements LoaderCallbacks
         supplierNameEditText = findViewById(R.id.supplier_name);
         supplierPhoneEditText = findViewById(R.id.supplier_phone);
         callSupplierButton = findViewById(R.id.call_supplier);
+        quantityRemoveButton = findViewById(R.id.quantity_remove_button);
+        quantityAddButton = findViewById(R.id.quantity_add_button);
+
+        quantityRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int quantity;
+
+                try {
+                    quantity = Integer.valueOf(quantityEditText.getText().toString());
+                } catch (NumberFormatException e) {
+                    quantity = 0;
+                }
+
+                if (quantity > 0) {
+                    quantity--;
+                }
+
+                quantityEditText.setText(String.valueOf(quantity));
+            }
+        });
+
+        quantityAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int quantity;
+
+                try {
+                    quantity = Integer.valueOf(quantityEditText.getText().toString());
+                } catch (NumberFormatException e) {
+                    quantity = 0;
+                }
+
+                quantityEditText.setText(String.valueOf(++quantity));
+            }
+        });
     }
 
     @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
