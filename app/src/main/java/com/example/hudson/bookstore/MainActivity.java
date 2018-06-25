@@ -1,6 +1,9 @@
 package com.example.hudson.bookstore;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +20,14 @@ import com.example.hudson.bookstore.data.BookContract.BookEntry;
 import com.example.hudson.bookstore.data.BookDbHelper;
 import com.example.hudson.bookstore.data.BookProvider;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public static final int DEMO_BOOK_PRICE = 10;
     public static final int DEMO_BOOK_QUANTITY = 3;
-    private ListView booksListView;
+
+    public static final int CURSOR_LOADER = 1;
+
+    private BookCursorAdapter bookCursorAdapter = new BookCursorAdapter(this, null);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button insertButton = findViewById(R.id.insert_data_button);
-        booksListView = findViewById(R.id.book_list_View);
+        ListView booksListView = findViewById(R.id.book_list_View);
         booksListView.setEmptyView(findViewById(R.id.empty_text_view));
+        booksListView.setAdapter(bookCursorAdapter);
 
-        loadBooks();
+        getLoaderManager().initLoader(CURSOR_LOADER, null, this);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,13 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 cv.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.demo_supplier_phone));
 
                 getContentResolver().insert(BookContract.CONTENT_URI, cv);
-
-                loadBooks();
             }
         });
     }
 
-    void loadBooks() {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {
                 BookEntry._ID,
                 BookEntry.COLUMN_PRODUCT_NAME,
@@ -61,9 +67,26 @@ public class MainActivity extends AppCompatActivity {
                 BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER
         };
 
-        Cursor cursor = getContentResolver().query(BookContract.CONTENT_URI, projection, null, null, null);
-
-        booksListView.setAdapter(new BookCursorAdapter(MainActivity.this, cursor));
+        switch (id) {
+            case CURSOR_LOADER:
+                return new CursorLoader(this,
+                        BookContract.CONTENT_URI,
+                        projection,
+                        null,
+                        null,
+                        null);
+            default:
+                return null;
+        }
     }
 
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        bookCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        bookCursorAdapter.changeCursor(null);
+    }
 }
